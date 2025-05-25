@@ -76,8 +76,10 @@ def logout():
 
 
 @app.route('/', methods=['GET', 'POST'])
-@login_required
 def index():
+    if 'user_id' not in session:
+        return render_template('home.html')
+
     if request.method == 'POST':
         content = request.form.get('content')
         if content:
