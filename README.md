@@ -1,4 +1,4 @@
-# learn-smolagents
+# noto
 
 A simple Flask TODO list application with user authentication (registration/login), route protection, and session management.
 
