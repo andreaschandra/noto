@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash, abort
 from flask_sqlalchemy import SQLAlchemy
 import os
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import inspect, text
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
@@ -14,6 +15,8 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
     done = db.Column(db.Boolean, default=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('todos', lazy=True))
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,6 +31,11 @@ class User(db.Model):
 
 with app.app_context():
     db.create_all()
+    inspector = inspect(db.engine)
+    columns = [col['name'] for col in inspector.get_columns('todo')]
+    if 'user_id' not in columns:
+        db.session.execute(text('ALTER TABLE todo ADD COLUMN user_id INTEGER'))
+        db.session.commit()
 
 def login_required(f):
     @wraps(f)
@@ -83,12 +91,12 @@ def index():
     if request.method == 'POST':
         content = request.form.get('content')
         if content:
-            new_todo = Todo(content=content)
+            new_todo = Todo(content=content, user_id=session['user_id'])
             db.session.add(new_todo)
             db.session.commit()
         return redirect(url_for('index'))
 
-    todos = Todo.query.order_by(Todo.id).all()
+    todos = Todo.query.filter_by(user_id=session['user_id']).order_by(Todo.id).all()
     return render_template('index.html', todos=todos)
 
 
@@ -96,6 +104,8 @@ def index():
 @login_required
 def toggle(id):
     todo = Todo.query.get_or_404(id)
+    if todo.user_id != session['user_id']:
+        abort(403)
     todo.done = not todo.done
     db.session.commit()
     return redirect(url_for('index'))
@@ -105,6 +115,8 @@ def toggle(id):
 @login_required
 def edit(id):
     todo = Todo.query.get_or_404(id)
+    if todo.user_id != session['user_id']:
+        abort(403)
     if request.method == 'POST':
         content = request.form.get('content')
         if content:
@@ -118,6 +130,8 @@ def edit(id):
 @login_required
 def delete(id):
     todo = Todo.query.get_or_404(id)
+    if todo.user_id != session['user_id']:
+        abort(403)
     db.session.delete(todo)
     db.session.commit()
     return redirect(url_for('index'))
@@ -127,6 +141,8 @@ def delete(id):
 @login_required
 def api_edit(id):
     todo = Todo.query.get_or_404(id)
+    if todo.user_id != session['user_id']:
+        abort(403)
     data = request.get_json()
     content = data.get('content') if data else None
     if not content:
