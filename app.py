@@ -4,6 +4,7 @@ import os
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import inspect, text
+from datetime import datetime, timezone
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
@@ -22,6 +23,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    full_name = db.Column(db.String(120), nullable=True)
+    created_at = db.Column(db.TIMESTAMP, default=lambda: datetime.now(timezone.utc))
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -32,10 +35,16 @@ class User(db.Model):
 with app.app_context():
     db.create_all()
     inspector = inspect(db.engine)
-    columns = [col['name'] for col in inspector.get_columns('todo')]
-    if 'user_id' not in columns:
+    todo_columns = [col['name'] for col in inspector.get_columns('todo')]
+    if 'user_id' not in todo_columns:
         db.session.execute(text('ALTER TABLE todo ADD COLUMN user_id INTEGER'))
-        db.session.commit()
+    user_columns = [col['name'] for col in inspector.get_columns('user')]
+    if 'full_name' not in user_columns:
+        db.session.execute(text('ALTER TABLE user ADD COLUMN full_name TEXT'))
+    if 'created_at' not in user_columns:
+        db.session.execute(text("ALTER TABLE user ADD COLUMN created_at DATETIME"))
+        db.session.execute(text("UPDATE user SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL"))
+    db.session.commit()
 
 def login_required(f):
     @wraps(f)
@@ -150,6 +159,41 @@ def api_edit(id):
     todo.content = content
     db.session.commit()
     return jsonify({'id': todo.id, 'content': todo.content})
+
+@app.route('/profile')
+@login_required
+def profile():
+    user = User.query.get(session['user_id'])
+    connected_accounts = []
+    return render_template('profile.html', user=user, connected_accounts=connected_accounts)
+ 
+@app.route('/change_password', methods=['POST'])
+@login_required
+def change_password():
+    current_password = request.form.get('current_password', '')
+    new_password = request.form.get('new_password', '')
+    confirm_password = request.form.get('confirm_password', '')
+    user = User.query.get(session['user_id'])
+    if not user.check_password(current_password):
+        return jsonify(success=False, message='Current password is incorrect')
+    if new_password == current_password:
+        return jsonify(success=False, message='New password must be different from current password')
+    if new_password != confirm_password:
+        return jsonify(success=False, message='New password and confirmation do not match')
+    user.set_password(new_password)
+    db.session.commit()
+    return jsonify(success=True, message='Password changed successfully')
+
+@app.route('/delete_account', methods=['POST'])
+@login_required
+def delete_account():
+    user = User.query.get(session['user_id'])
+    Todo.query.filter_by(user_id=user.id).delete()
+    db.session.delete(user)
+    db.session.commit()
+    session.clear()
+    flash('Your account has been deleted.')
+    return redirect(url_for('register'))
 
 
 if __name__ == '__main__':

@@ -52,13 +52,14 @@
   <body>
     <div class="toggle-switch">
       <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm me-2">Logout</a>
+      <a href="{{ url_for('profile') }}" class="btn btn-outline-primary btn-sm me-2">Profile</a>
       <button id="toggle-mode" class="btn btn-outline-secondary btn-sm">🌙 Dark Mode</button>
     </div>
     <div class="container mt-5">
       <h1 class="mb-4">Todo List</h1>
       <form method="POST" action="{{ url_for('index') }}">
         <div class="input-group mb-3">
-          <input type="text" name="content" class="form-control" placeholder="Add new task" required>
+          <input id="newTaskInput" type="text" name="content" class="form-control" placeholder="Add new task" required>
           <button class="btn btn-primary" type="submit">Add</button>
         </div>
       </form>
@@ -163,6 +164,10 @@
           }
         });
       });
+      var newTaskInput = document.getElementById('newTaskInput');
+      if (newTaskInput) {
+        newTaskInput.focus();
+      }
     });
     </script>
   </body>
