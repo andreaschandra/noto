@@ -24,22 +24,40 @@
     </nav>
   </header>
 
-  <section class="slider">
-    <div class="slide active">
-      <img src="https://placehold.co/1200x500.png?text=Capture+Your+Thoughts" alt="Capture Your Thoughts">
-      <div class="caption">"Capture ideas seamlessly with Noto."</div>
-    </div>
-    <div class="slide">
-      <img src="https://placehold.co/1200x500.png?text=Boost+Productivity" alt="Boost Productivity">
-      <div class="caption">"Organize your notes, boost your dev productivity."</div>
-    </div>
-    <div class="slide">
-      <img src="https://placehold.co/1200x500.png?text=Stay+Organized" alt="Stay Organized">
-      <div class="caption">"Stay organized, stay ahead."</div>
-    </div>
-  </section>
-
-  <section class="features" id="features">
+  <main>
+    <section class="slider">
+      <div class="slide active">
+        <img src="https://placehold.co/1200x500.png?text=Capture+Your+Thoughts" alt="Capture Your Thoughts">
+        <div class="overlay"></div>
+        <div class="hero-content">
+          <h1>Capture Your Thoughts</h1>
+          <p>Capture ideas seamlessly with Noto.</p>
+          <a href="{{ url_for('register') }}" class="btn-primary btn-hero">Get Started</a>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="https://placehold.co/1200x500.png?text=Boost+Productivity" alt="Boost Productivity">
+        <div class="overlay"></div>
+        <div class="hero-content">
+          <h1>Boost Productivity</h1>
+          <p>Organize your notes, boost your dev productivity.</p>
+          <a href="{{ url_for('register') }}" class="btn-primary btn-hero">Get Started</a>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="https://placehold.co/1200x500.png?text=Stay+Organized" alt="Stay Organized">
+        <div class="overlay"></div>
+        <div class="hero-content">
+          <h1>Stay Organized</h1>
+          <p>Stay organized, stay ahead.</p>
+          <a href="{{ url_for('register') }}" class="btn-primary btn-hero">Get Started</a>
+        </div>
+      </div>
+    </section>
+    <section class="section-title">
+      <h2>Features</h2>
+    </section>
+    <section class="features" id="features">
     <div class="feature">
       <i class="fas fa-sticky-note fa-3x"></i>
       <h3>Organize Effortlessly</h3>
@@ -55,6 +73,11 @@
       <h3>Developer-Friendly</h3>
       <p>Markdown support and code snippets for clean documentation.</p>
     </div>
+    </section>
+  </main>
+  <section class="cta">
+    <h2>Ready to Boost Your Productivity?</h2>
+    <a href="{{ url_for('register') }}" class="btn-primary btn-large">Start for Free</a>
   </section>
 
   <footer>
