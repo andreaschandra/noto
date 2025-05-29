@@ -59,8 +59,11 @@ def register():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        if not username or not password:
+        confirm_password = request.form.get('confirm_password')
+        if not username or not password or not confirm_password:
             flash('Username and password are required.')
+        elif password != confirm_password:
+            flash('the password is not match')
         elif User.query.filter_by(username=username).first():
             flash('Username already exists.')
         else:
