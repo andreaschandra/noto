@@ -23,3 +23,17 @@ footer { background: #333; color: #fff; padding: 2rem; text-align: center; }
 .socials a { color: #fff; margin: 0 0.5rem; font-size: 1.2rem; transition: color 0.3s; }
 .socials a:hover { color: #ff7f50; }
 @media (max-width: 768px) { .features { flex-direction: column; align-items: center; } }
+/* Pricing Page */
+.pricing-section { margin-top: 80px; padding: 4rem 2rem; text-align: center; background: #fff; }
+.pricing-header { font-size: 2.5rem; margin-bottom: 2rem; color: #333; }
+.pricing-cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; }
+.pricing-card { background: #f9f9f9; border: 1px solid #e0e0e0; padding: 2rem; border-radius: 8px; width: 300px; display: flex; flex-direction: column; align-items: center; }
+.pricing-card.popular { border: 2px solid #ff7f50; }
+.card-title { font-size: 1.5rem; margin-bottom: 1rem; }
+.card-price { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; }
+.card-features { list-style: none; padding: 0; margin-bottom: 1.5rem; text-align: left; }
+.card-features li { margin-bottom: 0.5rem; }
+.card-features li:before { content: "\f00c"; font-family: "Font Awesome 5 Free"; font-weight: 900; margin-right: 0.5rem; color: #ff7f50; }
+.card-btn { background-color: #ff7f50; color: #fff; padding: 0.75rem 1.25rem; text-decoration: none; border-radius: 4px; transition: background 0.3s; }
+.card-btn:hover { background-color: #ff6347; }
+@media (max-width: 768px) { .pricing-cards { flex-direction: column; align-items: center; } }

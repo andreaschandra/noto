@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Noto - Boost Your Developer Productivity</title>
+  <title>Noto - Pricing</title>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -17,6 +17,7 @@
         </svg>
       </div>
       <ul class="nav-links">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
         <li><a href="{{ url_for('pricing') }}">Pricing</a></li>
         <li><a href="{{ url_for('login') }}">Login</a></li>
         <li><a href="{{ url_for('register') }}" class="btn-primary">Start for Free</a></li>
@@ -24,36 +25,38 @@
     </nav>
   </header>
 
-  <section class="slider">
-    <div class="slide active">
-      <img src="https://placehold.co/1200x500.png?text=Capture+Your+Thoughts" alt="Capture Your Thoughts">
-      <div class="caption">"Capture ideas seamlessly with Noto."</div>
-    </div>
-    <div class="slide">
-      <img src="https://placehold.co/1200x500.png?text=Boost+Productivity" alt="Boost Productivity">
-      <div class="caption">"Organize your notes, boost your dev productivity."</div>
-    </div>
-    <div class="slide">
-      <img src="https://placehold.co/1200x500.png?text=Stay+Organized" alt="Stay Organized">
-      <div class="caption">"Stay organized, stay ahead."</div>
-    </div>
-  </section>
+  <section class="pricing-section">
+    <h2 class="pricing-header">Choose your path to productivity</h2>
+    <div class="pricing-cards">
+      <div class="pricing-card">
+        <h3 class="card-title">Basic</h3>
+        <p class="card-price">$1/mo</p>
+        <ul class="card-features">
+          <li>Todo Projects</li>
+        </ul>
+        <a href="#" class="card-btn">Upgrade</a>
+      </div>
 
-  <section class="features" id="features">
-    <div class="feature">
-      <i class="fas fa-sticky-note fa-3x"></i>
-      <h3>Organize Effortlessly</h3>
-      <p>Tag, search, and categorize your notes with ease.</p>
-    </div>
-    <div class="feature">
-      <i class="fas fa-sync-alt fa-3x"></i>
-      <h3>Sync Across Devices</h3>
-      <p>Access your notes anywhere, anytime.</p>
-    </div>
-    <div class="feature">
-      <i class="fas fa-code fa-3x"></i>
-      <h3>Developer-Friendly</h3>
-      <p>Markdown support and code snippets for clean documentation.</p>
+      <div class="pricing-card popular">
+        <h3 class="card-title">Pro</h3>
+        <p class="card-price">$5/mo</p>
+        <ul class="card-features">
+          <li>Todo Projects</li>
+          <li>Google Calendar Integration</li>
+        </ul>
+        <a href="#" class="card-btn">Upgrade</a>
+      </div>
+
+      <div class="pricing-card">
+        <h3 class="card-title">Enterprise</h3>
+        <p class="card-price">$10/mo</p>
+        <ul class="card-features">
+          <li>Todo Projects</li>
+          <li>Google Calendar Integration</li>
+          <li>AI Assistant</li>
+        </ul>
+        <a href="#" class="card-btn">Upgrade</a>
+      </div>
     </div>
   </section>
 

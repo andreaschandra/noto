@@ -108,6 +108,10 @@ def index():
     todos = Todo.query.filter_by(user_id=session['user_id']).order_by(Todo.id).all()
     return render_template('index.html', todos=todos)
 
+@app.route('/pricing')
+def pricing():
+    return render_template('pricing.html')
+
 
 @app.route('/toggle/<int:id>')
 @login_required
