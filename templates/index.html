@@ -77,6 +77,9 @@
         </div>
       </div>
       <div id="main">
+        <button id="mainSidebarToggle" class="btn btn-link position-absolute" style="top: 1rem; left: 1rem; z-index: 1000; display: none;">
+          <i class="fas fa-bars"></i>
+        </button>
         <div class="toggle-switch">
       <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm me-2">Logout</a>
       <a href="{{ url_for('profile') }}" class="btn btn-outline-primary btn-sm me-2">Profile</a>
@@ -199,14 +202,29 @@
       }
 
       var sidebarToggle = document.getElementById('sidebarToggle');
+      var mainSidebarToggle = document.getElementById('mainSidebarToggle');
+      
+      function toggleSidebar() {
+        var sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('collapsed');
+        var icon = sidebarToggle.querySelector('i');
+        icon.classList.toggle('fa-angle-left');
+        icon.classList.toggle('fa-angle-right');
+        
+        // Show/hide the main toggle button
+        if (sidebar.classList.contains('collapsed')) {
+          mainSidebarToggle.style.display = 'block';
+        } else {
+          mainSidebarToggle.style.display = 'none';
+        }
+      }
+      
       if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', function() {
-          var sidebar = document.getElementById('sidebar');
-          sidebar.classList.toggle('collapsed');
-          var icon = this.querySelector('i');
-          icon.classList.toggle('fa-angle-left');
-          icon.classList.toggle('fa-angle-right');
-        });
+        sidebarToggle.addEventListener('click', toggleSidebar);
+      }
+      
+      if (mainSidebarToggle) {
+        mainSidebarToggle.addEventListener('click', toggleSidebar);
       }
     });
     </script>
